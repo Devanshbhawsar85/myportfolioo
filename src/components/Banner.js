@@ -10,7 +10,7 @@ export const Banner = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [text, setText] = useState("");
   const [delta, setDelta] = useState(300 - Math.random() * 100);
-  const [index, setIndex] = useState(1);
+  // Removed unused index state
   const toRotate = [
     "Web Developer",
     "Backend Developer",
@@ -18,20 +18,9 @@ export const Banner = () => {
   ];
   const period = 2000;
 
-  // Function to handle resume click
   const handleResumeClick = () => {
     window.open(`${process.env.PUBLIC_URL}/assets/resume.pdf`, "_blank");
   };
-
-  useEffect(() => {
-    let ticker = setInterval(() => {
-      tick();
-    }, delta);
-
-    return () => {
-      clearInterval(ticker);
-    };
-  }, [text]);
 
   const tick = () => {
     let i = loopNum % toRotate.length;
@@ -48,17 +37,23 @@ export const Banner = () => {
 
     if (!isDeleting && updatedText === fullText) {
       setIsDeleting(true);
-      setIndex((prevIndex) => prevIndex - 1);
       setDelta(period);
     } else if (isDeleting && updatedText === "") {
       setIsDeleting(false);
       setLoopNum(loopNum + 1);
-      setIndex(1);
       setDelta(500);
-    } else {
-      setIndex((prevIndex) => prevIndex + 1);
     }
   };
+
+  useEffect(() => {
+    let ticker = setInterval(() => {
+      tick();
+    }, delta);
+
+    return () => {
+      clearInterval(ticker);
+    };
+  }, [text, delta, tick, isDeleting, loopNum]); // Added missing dependencies
 
   return (
     <section className="banner" id="home">
