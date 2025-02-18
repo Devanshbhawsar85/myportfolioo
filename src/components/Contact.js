@@ -1,5 +1,4 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import contactImg from "../assets/img/contact-img.svg";
 import "animate.css";
@@ -13,9 +12,16 @@ export const Contact = () => {
     phone: "",
     message: "",
   };
+
   const [formDetails, setFormDetails] = useState(formInitialDetails);
   const [buttonText, setButtonText] = useState("Send");
   const [status, setStatus] = useState({});
+
+  // Set the API URL dynamically based on the environment
+  const API_URL =
+    process.env.NODE_ENV === "production"
+      ? "https://devansh-bhawsar.onrender.com/contact" // Production URL (Render)
+      : "http://localhost:5000/contact"; // Local Development URL
 
   const onFormUpdate = (category, value) => {
     setFormDetails({
@@ -27,23 +33,36 @@ export const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setButtonText("Sending...");
-    let response = await fetch("http://localhost:5000/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(formDetails),
-    });
-    setButtonText("Send");
-    let result = await response.json();
-    setFormDetails(formInitialDetails);
-    if (result.code === 200) {
-      // Changed == to ===
-      setStatus({ success: true, message: "Message sent successfully" }); // Fixed typo in 'success'
-    } else {
+
+    try {
+      let response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(formDetails),
+      });
+
+      let result = await response.json();
+      console.log("API Response:", result); // Debugging line
+
+      setButtonText("Send");
+      setFormDetails(formInitialDetails);
+
+      if (result.code === 200) {
+        setStatus({ success: true, message: "Message sent successfully" });
+      } else {
+        setStatus({
+          success: false,
+          message: result.message || "Something went wrong.",
+        });
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+      setButtonText("Send");
       setStatus({
-        success: false, // Fixed typo in 'success'
-        message: "Something went wrong, please try again later.",
+        success: false,
+        message: "Connection error, please try again later.",
       });
     }
   };
@@ -89,7 +108,7 @@ export const Contact = () => {
                       <Col size={12} sm={6} className="px-1">
                         <input
                           type="text"
-                          value={formDetails.lastName} // Fixed typo in 'lastName'
+                          value={formDetails.lastName}
                           placeholder="Last Name"
                           onChange={(e) =>
                             onFormUpdate("lastName", e.target.value)
