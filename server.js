@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
@@ -8,6 +9,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/", router);
+
+// Serve static files if in production
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static(path.join(__dirname, "build")));
+
+  // Handle all routes by serving the React app
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "build", "index.html"));
+  });
+}
 
 // Use the dynamic port from Render environment variables or fallback to 5000 locally
 const PORT = process.env.PORT || 5000;
