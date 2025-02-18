@@ -54,6 +54,9 @@ export const Contact = () => {
       if (result.code === 200) {
         setStatus({ success: true, message: "Message sent successfully" });
         toast.success("Message sent successfully!", { position: "top-center" }); // Success toast
+
+        // Remove the message after 5 seconds
+        setTimeout(() => setStatus({}), 5000);
       } else {
         setStatus({
           success: false,
@@ -62,6 +65,9 @@ export const Contact = () => {
         toast.error(result.message || "Something went wrong.", {
           position: "top-center",
         }); // Error toast
+
+        // Remove the message after 5 seconds
+        setTimeout(() => setStatus({}), 5000);
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -73,6 +79,9 @@ export const Contact = () => {
       toast.error("Connection error, please try again later.", {
         position: "top-center",
       }); // Error toast
+
+      // Remove the message after 5 seconds
+      setTimeout(() => setStatus({}), 4000);
     }
   };
 
