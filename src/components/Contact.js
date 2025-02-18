@@ -121,6 +121,8 @@ export const Contact = () => {
                           onChange={(e) =>
                             onFormUpdate("firstName", e.target.value)
                           }
+                          pattern="[A-Za-z\s]+" // Restrict numbers and allow only letters
+                          title="Name can only contain letters and spaces"
                         />
                       </Col>
                       <Col size={12} sm={6} className="px-1">
@@ -131,6 +133,8 @@ export const Contact = () => {
                           onChange={(e) =>
                             onFormUpdate("lastName", e.target.value)
                           }
+                          pattern="[A-Za-z\s]+" // Restrict numbers and allow only letters
+                          title="Name can only contain letters and spaces"
                         />
                       </Col>
                       <Col size={12} sm={6} className="px-1">
@@ -141,6 +145,8 @@ export const Contact = () => {
                           onChange={(e) =>
                             onFormUpdate("email", e.target.value)
                           }
+                          pattern="[a-zA-Z0-9._%+-]+@gmail\.com$" // Enforces @gmail.com at the end
+                          title="Email must end with @gmail.com"
                         />
                       </Col>
                       <Col size={12} sm={6} className="px-1">
@@ -151,6 +157,9 @@ export const Contact = () => {
                           onChange={(e) =>
                             onFormUpdate("phone", e.target.value)
                           }
+                          maxLength="10" // Enforces 10 digits for the phone number
+                          pattern="[0-9]{10}" // Ensures only 10 numeric digits
+                          title="Phone number must be 10 digits"
                         />
                       </Col>
                       <Col size={12} className="px-1">
@@ -166,17 +175,6 @@ export const Contact = () => {
                           <span>{buttonText}</span>
                         </button>
                       </Col>
-                      {status.message && (
-                        <Col>
-                          <p
-                            className={
-                              status.success === false ? "danger" : "success"
-                            }
-                          >
-                            {status.message}
-                          </p>
-                        </Col>
-                      )}
                     </Row>
                   </form>
                 </div>
