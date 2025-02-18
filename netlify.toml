@@ -5,6 +5,5 @@
 [build.environment]
   NODE_VERSION = "16"
   NPM_VERSION = "8"
-  NODE_OPTIONS = "--openssl-legacy-provider"
   CI = "false"
   DEBUG = "*"
