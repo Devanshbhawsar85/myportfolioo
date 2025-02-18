@@ -3,6 +3,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import contactImg from "../assets/img/contact-img.svg";
 import "animate.css";
 import TrackVisibility from "react-on-screen";
+import { ToastContainer, toast } from "react-toastify"; // Importing toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Importing toast styles
 
 export const Contact = () => {
   const formInitialDetails = {
@@ -51,11 +53,15 @@ export const Contact = () => {
 
       if (result.code === 200) {
         setStatus({ success: true, message: "Message sent successfully" });
+        toast.success("Message sent successfully!", { position: "top-center" }); // Success toast
       } else {
         setStatus({
           success: false,
           message: result.message || "Something went wrong.",
         });
+        toast.error(result.message || "Something went wrong.", {
+          position: "top-center",
+        }); // Error toast
       }
     } catch (error) {
       console.error("Error sending message:", error);
@@ -64,6 +70,9 @@ export const Contact = () => {
         success: false,
         message: "Connection error, please try again later.",
       });
+      toast.error("Connection error, please try again later.", {
+        position: "top-center",
+      }); // Error toast
     }
   };
 
@@ -167,6 +176,9 @@ export const Contact = () => {
           </Col>
         </Row>
       </Container>
+
+      {/* ToastContainer to render toast notifications */}
+      <ToastContainer />
     </section>
   );
 };
