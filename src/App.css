@@ -686,3 +686,30 @@ nav.navbar .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
   letter-spacing: 0.5px;
   margin-top: 20px;
 }
+
+.footer .contact-text {
+  font-size: 1.5rem; /* Increase font size */
+  font-weight: bold; /* Make the text bold */
+  color: #f4f4f4; /* Set a dark color for better contrast */
+  margin-bottom: 10px; /* Space between the contact and the copyright */
+}
+
+.email-link {
+  font-size: 1.5rem; /* Increase the font size of the email */
+  font-weight: bold; /* Bold the email for emphasis */
+  color: #99ff00; /* Blue color for the email */
+  text-decoration: none; /* Remove underline */
+}
+
+.email-link:hover {
+  text-decoration: underline; /* Add underline on hover */
+  color: #e8e8e8; /* Darken the color on hover */
+}
+/* In App.css */
+.thanks-text {
+  font-size: 1.8rem; /* Increase font size */
+  font-weight: bold; /* Make the text bold */
+  color: #f8f8f8; /* Light color for black background */
+  margin-bottom: 20px; /* Space below the text */
+  letter-spacing: 1px; /* Slightly increase letter spacing */
+}
