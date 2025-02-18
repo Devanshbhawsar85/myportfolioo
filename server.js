@@ -1,10 +1,9 @@
 const express = require("express");
 const path = require("path");
-const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 
-// Configure dotenv for development environment
+// Load environment variables (only in development)
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
@@ -13,9 +12,9 @@ if (process.env.NODE_ENV !== "production") {
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use("/", router);
+app.use(express.urlencoded({ extended: true })); // Added for form-data support
 
-// Serve static files if in production
+// Serve static files in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "build")));
 
@@ -29,16 +28,18 @@ app.listen(PORT, () => {
   console.log(`Server Running on port ${PORT}`);
 });
 
-// Setting up Nodemailer with environment variables
+// Configure Nodemailer with SMTP
 const contactEmail = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // Use true for port 465
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
 
-// Verify email transport setup
+// Verify email setup
 contactEmail.verify((error) => {
   if (error) {
     console.error("Email configuration error:", error);
@@ -48,41 +49,39 @@ contactEmail.verify((error) => {
 });
 
 // Contact form endpoint
-router.post("/contact", (req, res) => {
-  const name = req.body.firstName + " " + req.body.lastName;
-  const email = req.body.email;
-  const message = req.body.message;
-  const phone = req.body.phone;
+app.post("/contact", async (req, res) => {
+  const { firstName, lastName, email, message, phone } = req.body;
+  const fullName = `${firstName} ${lastName}`;
 
-  const mail = {
-    from: name,
-    to: process.env.EMAIL_USER, // Use environment variable for recipient
+  const mailOptions = {
+    from: `"${fullName}" <${email}>`,
+    to: process.env.EMAIL_USER, // Your email
     subject: "Contact Form Submission - Portfolio",
     html: `
-      <p>Name: ${name}</p>
-      <p>Email: ${email}</p>
-      <p>Phone: ${phone}</p>
-      <p>Message: ${message}</p>
+      <h3>New Contact Form Submission</h3>
+      <p><strong>Name:</strong> ${fullName}</p>
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Message:</strong> ${message}</p>
     `,
   };
 
-  contactEmail.sendMail(mail, (error) => {
-    if (error) {
-      console.error("Email sending error:", error);
-      res.json({
-        code: 500,
-        status: "Error",
-        message: "Failed to send email",
-        error: error.message,
-      });
-    } else {
-      res.json({
-        code: 200,
-        status: "Success",
-        message: "Email sent successfully",
-      });
-    }
-  });
+  try {
+    await contactEmail.sendMail(mailOptions);
+    res.json({
+      code: 200,
+      status: "Success",
+      message: "Email sent successfully",
+    });
+  } catch (error) {
+    console.error("Email sending error:", error);
+    res.json({
+      code: 500,
+      status: "Error",
+      message: "Failed to send email",
+      error: error.message,
+    });
+  }
 });
 
 module.exports = app;
