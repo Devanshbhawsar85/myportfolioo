@@ -22,7 +22,7 @@
     "react-on-screen": "^2.1.1",
     "react-router-dom": "^6.3.0",
     "react-router-hash-link": "^2.4.3",
-    "react-scripts": "^5.0.1",
+    "react-scripts": "5.0.1",
     "react-toastify": "^11.0.3",
     "web-vitals": "^2.1.4"
   },
@@ -60,13 +60,10 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "gh-pages": "^6.3.0",
-    "webpack": "^5.88.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
+    "gh-pages": "^6.3.0"
   },
   "engines": {
-    "node": "18.x",
-    "npm": "10.x"
+    "node": ">=18.x",
+    "npm": ">=10.x"
   }
 }
