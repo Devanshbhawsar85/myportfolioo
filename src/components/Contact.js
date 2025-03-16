@@ -145,8 +145,7 @@ export const Contact = () => {
                           onChange={(e) =>
                             onFormUpdate("email", e.target.value)
                           }
-                          pattern="[a-zA-Z0-9._%+-]+@gmail\.com$" // Enforces @gmail.com at the end
-                          title="Email must end with @gmail.com"
+                          title="Enter a valid email address"
                         />
                       </Col>
                       <Col size={12} sm={6} className="px-1">
